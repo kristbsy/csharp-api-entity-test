@@ -12,8 +12,16 @@ namespace workshop.wwwapi.Endpoints
             var surgeryGroup = app.MapGroup("surgery");
 
             surgeryGroup.MapGet("/patients", GetPatients);
+            surgeryGroup.MapGet("/patient/{id}", GetPatient);
+            surgeryGroup.MapPost("/patient/create", CreatePatient);
             surgeryGroup.MapGet("/doctors", GetDoctors);
+            surgeryGroup.MapGet("/doctor/{id}", GetDoctor);
+            surgeryGroup.MapPost("/doctor/create", CreateDoctor);
             surgeryGroup.MapGet("/appointmentsbydoctor/{id}", GetAppointmentsByDoctor);
+            surgeryGroup.MapGet("/appointmentsbypatient/{id}", GetAppointmentsByPatient);
+            surgeryGroup.MapGet("/appointments", GetAppointments);
+            surgeryGroup.MapGet("/appointment/{id}", GetAppointment);
+            surgeryGroup.MapPost("/appointment/create", CreateAppointment);
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -21,6 +29,27 @@ namespace workshop.wwwapi.Endpoints
         {
             var patients = await repository.GetPatients();
             return TypedResults.Ok(patients.Select(p => new PatientGetDTO(p)).ToList());
+        }
+
+        public static async Task<IResult> CreatePatient(IRepository repo, PatientPostDto patient)
+        {
+            var result = await repo.CreatePatient(patient);
+            if (result == null)
+            {
+                return TypedResults.InternalServerError();
+            }
+            return TypedResults.Ok(new PatientGetDTO(result));
+        }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public static async Task<IResult> GetPatient(IRepository repository, int id)
+        {
+            var patient = await repository.GetPatient(id);
+            if (patient == null)
+            {
+                return TypedResults.NotFound();
+            }
+            return TypedResults.Ok(new PatientGetDTO(patient));
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -42,7 +71,12 @@ namespace workshop.wwwapi.Endpoints
 
         public static async Task<IResult> CreateDoctor(IRepository repository, DoctorPostDto doc)
         {
-            throw new NotImplementedException();
+            var result = await repository.CreateDoctor(doc);
+            if (result == null)
+            {
+                return TypedResults.NotFound();
+            }
+            return TypedResults.Ok(result);
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -60,7 +94,7 @@ namespace workshop.wwwapi.Endpoints
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public static async Task<IResult> GetAppointments(IRepository repository, int id)
+        public static async Task<IResult> GetAppointments(IRepository repository)
         {
             var appointments = await repository.GetAppointments();
             return TypedResults.Ok(appointments.Select(a => new AppointmentGetDto(a)));
@@ -82,7 +116,12 @@ namespace workshop.wwwapi.Endpoints
             AppointmentPostDto app
         )
         {
-            throw new NotImplementedException();
+            var result = await repo.CreateAppointment(app);
+            if (result == null)
+            {
+                return TypedResults.NotFound();
+            }
+            return TypedResults.Ok(new AppointmentGetDto(result));
         }
     }
 }

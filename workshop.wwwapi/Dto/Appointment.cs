@@ -6,6 +6,7 @@ public class AppointmentPostDto
 {
     public DateTime Booking { get; set; }
 
+    public AppointmentType AppointmentType { get; set; }
     public int PatientId { get; set; }
     public int DoctorId { get; set; }
 }
@@ -17,8 +18,12 @@ public class AppointmentGetDto
     public int PatientId { get; set; }
     public PatientShallow Patient { get; set; }
 
+    public AppointmentType AppointmentType { get; set; }
+
     public int DoctorId { get; set; }
     public DoctorShallow Doctor { get; set; }
+
+    public AppointmentGetDto() { }
 
     public AppointmentGetDto(Appointment appointment)
     {
@@ -37,6 +42,10 @@ public class AppointmentWithoutDoctor
     public int PatientId { get; set; }
     public PatientShallow Patient { get; set; }
 
+    public AppointmentType AppointmentType { get; set; }
+
+    public AppointmentWithoutDoctor() { }
+
     public AppointmentWithoutDoctor(Appointment appointment)
     {
         this.Booking = appointment.Booking;
@@ -50,6 +59,10 @@ public class AppointmentWithoutPatient
     public DateTime Booking { get; set; }
     public int DoctorId { get; set; }
     public DoctorShallow Doctor { get; set; }
+
+    public AppointmentWithoutPatient() { }
+
+    public AppointmentType AppointmentType { get; set; }
 
     public AppointmentWithoutPatient(Appointment appointment)
     {

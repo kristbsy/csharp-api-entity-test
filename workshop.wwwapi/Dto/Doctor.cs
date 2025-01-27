@@ -13,6 +13,8 @@ public class DoctorGetDto
     public string FullName { get; set; }
     public IEnumerable<AppointmentWithoutDoctor> Appointments { get; set; }
 
+    public DoctorGetDto() { }
+
     public DoctorGetDto(Doctor doctor)
     {
         this.Id = doctor.Id;
@@ -27,6 +29,8 @@ public class DoctorShallow
 {
     public int Id { get; set; }
     public string FullName { get; set; }
+
+    public DoctorShallow() { }
 
     public DoctorShallow(Doctor doctor)
     {

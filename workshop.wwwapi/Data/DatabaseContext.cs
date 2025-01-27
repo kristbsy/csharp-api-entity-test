@@ -35,14 +35,7 @@ namespace workshop.wwwapi.Data
                 .HasMany(d => d.Appointments)
                 .WithOne(a => a.Patient)
                 .HasForeignKey(a => a.PatientId);
-            modelBuilder
-                .Entity<Appointment>()
-                .HasKey(p => new
-                {
-                    p.Booking,
-                    p.PatientId,
-                    p.DoctorId,
-                });
+            modelBuilder.Entity<Appointment>().HasKey(p => p.Id);
             ;
             //TODO: Seed Data Here
             modelBuilder
@@ -71,27 +64,35 @@ namespace workshop.wwwapi.Data
                     {
                         new Appointment
                         {
+                            Id = 1,
                             DoctorId = 1,
                             PatientId = 1,
                             Booking = DateTime.UtcNow,
+                            AppointmentType = AppointmentType.Physical,
                         },
                         new Appointment
                         {
+                            Id = 2,
                             DoctorId = 2,
                             PatientId = 1,
                             Booking = DateTime.UtcNow,
+                            AppointmentType = AppointmentType.Digital,
                         },
                         new Appointment
                         {
+                            Id = 3,
                             DoctorId = 1,
                             PatientId = 2,
                             Booking = DateTime.UtcNow,
+                            AppointmentType = AppointmentType.Physical,
                         },
                         new Appointment
                         {
+                            Id = 4,
                             DoctorId = 2,
                             PatientId = 2,
                             Booking = DateTime.UtcNow,
+                            AppointmentType = AppointmentType.Digital,
                         },
                     }
                 );

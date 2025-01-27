@@ -21,6 +21,14 @@ namespace workshop.wwwapi.Repository
                 .ToListAsync();
         }
 
+        public async Task<Patient?> GetPatient(int id)
+        {
+            return await _databaseContext
+                .Patients.Include(p => p.Appointments)
+                .ThenInclude(a => a.Doctor)
+                .FirstOrDefaultAsync(p => p.Id == id);
+        }
+
         public async Task<IEnumerable<Doctor>> GetDoctors()
         {
             return await _databaseContext
@@ -50,6 +58,7 @@ namespace workshop.wwwapi.Repository
         {
             var doc = new Doctor { FullName = doctor.FullName };
             var e = _databaseContext.Add(doc);
+            await _databaseContext.SaveChangesAsync();
             return await GetDoctor(e.Entity.Id);
         }
 
@@ -78,8 +87,9 @@ namespace workshop.wwwapi.Repository
                 PatientId = appointment.PatientId,
                 Booking = appointment.Booking,
             };
-
-            return await this.GetAppointment(app.Id);
+            var entity = _databaseContext.Appointments.Add(app);
+            await _databaseContext.SaveChangesAsync();
+            return await this.GetAppointment(entity.Entity.Id);
         }
 
         public async Task<Appointment?> GetAppointment(int id)
@@ -88,6 +98,14 @@ namespace workshop.wwwapi.Repository
                 .Appointments.Include(a => a.Patient)
                 .Include(a => a.Doctor)
                 .FirstOrDefaultAsync(a => a.Id == id);
+        }
+
+        public async Task<Patient?> CreatePatient(PatientPostDto patient)
+        {
+            var p = new Patient { FullName = patient.FullName };
+            var res = _databaseContext.Patients.Add(p);
+            await _databaseContext.SaveChangesAsync();
+            return await GetPatient(res.Entity.Id);
         }
     }
 }

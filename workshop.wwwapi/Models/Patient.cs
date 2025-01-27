@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data;
 using Microsoft.EntityFrameworkCore;
+using workshop.wwwapi.Repository;
 
 namespace workshop.wwwapi.Models
 {

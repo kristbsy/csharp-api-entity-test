@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using workshop.wwwapi.Models;
 
 namespace workshop.wwwapi.Repository;
@@ -5,8 +6,12 @@ namespace workshop.wwwapi.Repository;
 public class PatientGetDTO
 {
     public int Id { get; set; }
+
     public string FullName { get; set; }
+
     public IEnumerable<AppointmentWithoutPatient> Appointments { get; set; }
+
+    public PatientGetDTO() { }
 
     public PatientGetDTO(Patient patient)
     {
@@ -18,10 +23,17 @@ public class PatientGetDTO
     }
 }
 
+public class PatientPostDto
+{
+    public string FullName { get; set; }
+}
+
 public class PatientShallow
 {
     public int Id { get; set; }
     public string FullName { get; set; }
+
+    public PatientShallow() { }
 
     public PatientShallow(Patient patient)
     {
